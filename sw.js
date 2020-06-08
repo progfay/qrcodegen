@@ -21,15 +21,9 @@ const CROSS_ORIGIN_RESOURCE = [
 self.addEventListener('install', e => {
   const installing = async () => {
     const cache = await caches.open(CACHE_NAME)
-    return Promise.all([
-      ...SAME_ORIGIN_RESOURCE.map(async url => {
-        const response = await fetch(url)
-        await cache.put(url, response)
-      }),
-      ...CROSS_ORIGIN_RESOURCE.map(async url => {
-        const response = await fetch(url, { mode: 'cors' })
-        await cache.put(url, response)
-      })
+    return cache.addAll([
+      ...SAME_ORIGIN_RESOURCE,
+      ...CROSS_ORIGIN_RESOURCE.map(url => new Request(url, { mode: 'cors' }))
     ])
   }
 
@@ -40,15 +34,8 @@ self.addEventListener('fetch', function (e) {
   e.respondWith(
     caches.match(e.request.url, { ignoreSearch: true })
     .then(async response => {
-      if (response) return response
-
-      const resp = fetch(e.request, { mode: 'cors' })
-
-      setTimeout(async () => {
-        const cache = await caches.open(CACHE_NAME)
-        await cache.put(url, resp)
-      }, 0)
-
+      if (!response) response = fetch(e.request, { mode: 'cors' })
+      setTimeout(() => caches.open(CACHE_NAME).then(cache => cache.put(url, response)), 0)
       return response
     })
   )
