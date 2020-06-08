@@ -34,8 +34,15 @@ self.addEventListener('fetch', function (e) {
   e.respondWith(
     caches.match(e.request.url, { ignoreSearch: true })
     .then(async response => {
-      if (!response) response = fetch(e.request, { mode: 'cors' })
-      setTimeout(() => caches.open(CACHE_NAME).then(cache => cache.put(url, response)), 0)
+      if (response) return response
+
+      const resp = fetch(e.request.url, { mode: 'cors' })
+
+      setTimeout(async () => {
+        const cache = await caches.open(CACHE_NAME)
+        await cache.put(e.request.url, resp)
+      }, 0)
+
       return response
     })
   )
