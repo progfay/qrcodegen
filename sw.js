@@ -41,10 +41,10 @@ self.addEventListener("fetch", function (e) {
 
         setTimeout(async () => {
           const cache = await caches.open(CACHE_NAME);
-          await cache.put(e.request.url, resp);
+          await cache.put(e.request.url, await resp);
         }, 0);
 
-        return response;
+        return resp;
       }),
   );
 });
