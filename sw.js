@@ -40,6 +40,7 @@ self.addEventListener("fetch", function (e) {
         const resp = fetch(e.request.url, { mode: "cors" });
 
         setTimeout(async () => {
+          if (!/^https?:\/\//.test(e.request.url)) return;
           const cache = await caches.open(CACHE_NAME);
           await cache.put(e.request.url, await resp);
         }, 0);
