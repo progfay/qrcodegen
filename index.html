@@ -1,55 +1,68 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <title>QRCode Generator</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#ffffff">
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Generating QRCode on Web.">
+    <meta name="description" content="Generating QRCode on Web." />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-        
-        #container {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        #qrcode {
-            height: 90vmin;
-            max-height: 500px;
-            margin: 5vmin;
-        }
-        
-        #qrcode>img,
-        #qrcode>canvas {
-            width: 90vmin;
-            height: auto;
-            max-width: 500px;
-        }
-        
-        #text {
-            width: 90vmin;
-            max-width: 500px;
-            word-break: break-all;
-        }
-    </style>
-</head>
+      * {
+        margin: 0;
+        padding: 0;
+      }
 
-<body>
+      #container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #qrcode {
+        height: 90vmin;
+        max-height: 500px;
+        margin: 5vmin;
+      }
+
+      #qrcode > img,
+      #qrcode > canvas {
+        width: 90vmin;
+        height: auto;
+        max-width: 500px;
+      }
+
+      #text {
+        width: 90vmin;
+        max-width: 500px;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+
+  <body>
     <div id="container">
-        <div id="qrcode"></div>
-        <p id="text"></p>
+      <div id="qrcode"></div>
+      <p id="text"></p>
     </div>
 
     <template id="form-template">
@@ -67,38 +80,58 @@
       <h1 id="title">QRCode Generator</h1>
       <form action="" method="get" id="qr-form">
         <label for="text-input">Text: </label>
-        <input type="text" name="text" id="text-input" required>
-        <input type="submit" value="Generate">
+        <input type="text" name="text" id="text-input" required />
+        <input type="submit" value="Generate" />
       </form>
     </template>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha256-xUHvBjJ4hahBW8qN9gceFBibSFUzbe9PNttUvehITzY=" crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+      integrity="sha256-xUHvBjJ4hahBW8qN9gceFBibSFUzbe9PNttUvehITzY="
+      crossorigin="anonymous"
+    ></script>
     <script>
-        'use strict';
+      "use strict";
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(registration => {
-                console.log('ServiceWorker registration successful with scope:', registration.scope)
-            }).catch(err => {
-                console.error('ServiceWorker registration failed:', err)
-            })
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then((registration) => {
+            console.log(
+              "ServiceWorker registration successful with scope:",
+              registration.scope,
+            );
+          })
+          .catch((err) => {
+            console.error("ServiceWorker registration failed:", err);
+          });
+      }
+
+      window.addEventListener("load", () => {
+        const text = new URL(window.location.toString()).searchParams.get(
+          "text",
+        );
+        if (!text) {
+          const clone = document.importNode(
+            document.getElementById("form-template").content,
+            true,
+          );
+          document.getElementById("qrcode").appendChild(clone);
+          return;
         }
 
-        window.addEventListener('load', () => {
-            const text = new URL(window.location.toString()).searchParams.get("text")
-            if (!text) {
-                const clone = document.importNode(document.getElementById('form-template').content, true)
-                document.getElementById('qrcode').appendChild(clone)
-                return
-            }
-
-            document.getElementById('text').appendChild(document.createTextNode(text))
-            new QRCode(document.getElementById('qrcode'), text)
-        })
+        document
+          .getElementById("text")
+          .appendChild(document.createTextNode(text));
+        new QRCode(document.getElementById("qrcode"), text);
+      });
     </script>
     <noscript>
-      For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="https://www.enable-javascript.com/"> instructions how to enable JavaScript in your web browser</a>.
+      For full functionality of this site it is necessary to enable JavaScript.
+      Here are the
+      <a href="https://www.enable-javascript.com/">
+        instructions how to enable JavaScript in your web browser</a
+      >.
     </noscript>
-</body>
-
+  </body>
 </html>
