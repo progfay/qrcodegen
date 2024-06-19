@@ -1,22 +1,22 @@
 {
   "name": "QRCode Generator",
-  "short_name": "QR Gen",
-  "start_url": "index.html",
+  "short_name": "QRCode Gen",
+  "start_url": "/qrcodegen/index.html",
   "icons": [
     {
-      "src": "/images/android-chrome-192x192.png",
+      "src": "/qrcodegen/images/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/images/android-chrome-512x512.png",
+      "src": "/qrcodegen/images/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ],
   "share_target": {
     "url_template": "index.html?text={text}",
-    "action": "index.html",
+    "action": "/qrcodegen/index.html",
     "method": "GET",
     "enctype": "application/x-www-form-urlencoded",
     "params": {
